@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.sort;
 
 @ConfigurationProperties(prefix="endpoint")
 public class UserInfoService {
@@ -26,6 +26,7 @@ public class UserInfoService {
 
     private final double latitudeOfLondon = 51.5074;
     private final double longitudeOfLondon = -0.1278;
+
 
     public void setUrl(String url) {
         this.url = url;
@@ -118,7 +119,16 @@ public class UserInfoService {
         User[] user = responseEntity.getStatusCode() == HttpStatus.OK ? responseEntity.getBody() : null;
         List<User> usersAroundLondon = getUsersAroundLondon(getUsersInfo(user));
         usersAroundLondon.addAll(getUsersBasedOnCity("London").getUsersList());
+        getSortedList(usersAroundLondon);
         usersInfo.setUsersList(usersAroundLondon);
         return usersInfo;
+    }
+
+    /**
+     * Performs the sorting of the list.
+     * @param usersAroundLondon List of all users staying in and around London
+     */
+    private void getSortedList(List<User> usersAroundLondon) {
+        sort(usersAroundLondon, Comparator.comparingInt(User::getId));
     }
 }
