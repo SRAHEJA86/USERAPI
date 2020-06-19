@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.herokuapp</groupId>
-	<artifactId>api</artifactId>
+	<artifactId>user-info-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>userapi</name>
 	<description>Project for fetching user details based on city</description>
 
 	<properties>
